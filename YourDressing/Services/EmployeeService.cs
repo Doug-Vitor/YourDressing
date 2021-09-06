@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YourDressing.DataContext;
 using YourDressing.Models;
+using YourDressing.Models.Enums;
 using YourDressing.Services.Exceptions;
 using YourDressing.Services.Interfaces;
 
@@ -24,40 +25,41 @@ namespace YourDressing.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Employee>> FindAllAsync()
+        public async Task<List<Employee>> GetAllAsync()
         {
-            return await _context.Employees.Include(prop => prop.Section).OrderBy(x => x.Name).ToListAsync();
+            return await _context.Employees.Include(prop => prop.Section)
+                .Where(prop => prop.Situation == Situation.Active).OrderBy(x => x.Section.Name)
+                .ToListAsync();
         }
 
-        public async Task<List<Employee>> FindByCategoryAsync(string sector)
+        public async Task<List<Employee>> GetMonthEmployeesAsync()
         {
-            if (string.IsNullOrWhiteSpace(sector))
-                return await _context.Employees.OrderBy(x => x.Name).ToListAsync();
-
-            return await _context.Employees.Where(prop => prop.Section.Equals(sector))
-                .OrderBy(x => x.Name).ToListAsync();
+            return await _context.Employees.Include(prop => prop.Section)
+                .Where(prop => prop.IsMonthEmployee).OrderBy(x => x.Section.Name).ToListAsync();
         }
 
         public async Task<Employee> FindByIdAsync(int? id)
         {
-            return await _context.Employees.Include(prop => prop.Section)
-                .Where(prop => prop.Id == id).FirstOrDefaultAsync();
+            if (id == null)
+                throw new IdNotProvidedException("ID não fornecido");
+
+            Employee employee = await _context.Employees.Include(prop => prop.Section).Where(prop => prop.Id == id)
+                .FirstOrDefaultAsync();
+            if (employee == null)
+                throw new NotFoundException("Não foi possível encontrar um funcionário com o ID fornecido.");
+
+            return employee;
         }
 
         public async Task<List<Employee>> FindByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return await _context.Employees.Include(prop => prop.Section).OrderBy(x => x.Name)
-                    .ToListAsync();
+                return await GetAllAsync();
 
-            return await _context.Employees.Include(prop => prop.Section).Where(prop => prop.Section
-            .Equals(name)).OrderBy(x => x.Name).ToListAsync();
-        }
-
-        public async Task<List<Employee>> GetMonthEmployeesAsync()
-        {
-            return await _context.Employees.Include(prop => prop.Section).Where(prop => prop.IsMonthEmployee)
-                .OrderBy(x => x.Name).ToListAsync();
+            name = name.ToLower();
+            return await _context.Employees.Include(prop => prop.Section)
+                .Where(prop => prop.Name.ToLower().Contains(name)).OrderBy(x => x.Section.Name)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(Employee employee)
@@ -69,16 +71,11 @@ namespace YourDressing.Services
         public async Task RemoveAsync(int id)
         {
             Employee employee = await FindByIdAsync(id);
+            employee.Situation = Situation.Fired;
+            employee.IsMonthEmployee = false;
 
-            try
-            {
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw new IntegrityException("Este funcionário possui vendas atreladas a ele. Não é possível deletá-lo.");
-            }
+            _context.Update(employee);
+            await _context.SaveChangesAsync();
         }
     }
 }

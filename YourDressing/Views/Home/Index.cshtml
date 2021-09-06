@@ -1,4 +1,4 @@
-﻿@model HomeViewModel
+﻿@model IEnumerable<Employee>
 
 @{
     ViewData["Title"] = "Início";
@@ -6,32 +6,21 @@
 }
 
 <div class="row">
-    <div class="container">
-        <h3 style="float: left">@Model.Title</h3>
+    <div class="container" style="display: inline-block">
+        <h3 style="float: left">@ViewBag.Subtitle2</h3>
 
         <a class="btn btn-outline-dark" style="float: right" asp-controller="Employee" asp-action="Index">
-            Ações
+            Mais ações
         </a>
-        <a class="btn btn-info" style="float: right" asp-controller="Home" asp-action="Index" 
-           asp-route-filter="@Model.ButtonAction">
-            @Model.ButtonTitle
-        </a>
-    </div>
+    </div>  
 </div>
 
 <div class="row">
-    <partial name="_EmployeesPartial" for="@Model.Employees" />
-
     <div class="container">
+        <partial name="_EmployeesPartial" for="@Model" />
+
         <a class="btn btn-outline-dark" style="float: right" asp-controller="Employee" asp-action="Index">
-            Ações
-        </a>
-        <a class="btn btn-info" style="float: right" asp-controller="Home" asp-action="Index"
-           asp-route-filter="@Model.ButtonAction">
-            @Model.ButtonTitle
+            Outros funcionários
         </a>
     </div>
 </div>
-
-@* @Model.ButtonAction será definido pela Controller e sempre passará uma string curta ao 
-    parâmetro filter para definir o que será feito ao acionar a Action Index. *@

@@ -29,8 +29,9 @@ namespace YourDressing.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseSalary = table.Column<double>(type: "float", nullable: false),
-                    IsMonthEmployee = table.Column<bool>(type: "bit", nullable: false),
+                    Situation = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    BaseSalary = table.Column<double>(type: "float", nullable: false, defaultValue: 1299.0),
+                    IsMonthEmployee = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     SectionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -1,19 +1,24 @@
 ﻿@model IEnumerable<Employee>
 
-    <table class="table table-bordered table-striped text-center">
-        <thead>
-            <tr class="table-dark">
-                <th scope="row">@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.Section.Name)</th>
+<table class="table table-bordered table-striped text-center">
+    <thead>
+        <tr class="table-dark">
+            <th scope="row">@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Section.Name)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Employee employee in Model)
+        {
+            <tr>
+                <td class="text-center">@employee.Name</td>
+                <td class="text-center">@employee.Section.Name</td>
+                <td class="text-center">
+                    <a asp-controller="Employee" asp-action="Details"
+                       asp-route-id="@employee.Id" class="badge rounded-pill bg-info">Detalhes</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Employee employee in Model)
-            {
-                <tr>
-                    <td class="text-center">@employee.Name</td>
-                    <td class="text-center">@employee.Section.Name</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

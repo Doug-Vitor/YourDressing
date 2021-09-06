@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using X.PagedList;
 using YourDressing.Models;
 using YourDressing.Models.ViewModels;
 using YourDressing.Services.Exceptions;
@@ -21,23 +22,24 @@ namespace YourDressing.Controllers
             _sectorService = sectorService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter, string searchString, int? page)
         {
-            ViewData["Title"] = "Todos os funcionários";
-            ViewData["Subtitle2"] = "Todos os funcionários";
+            if (filter is null)
+               filter = "All";
 
-            return View(await _employeeService.FindAllAsync());
+            return View
+            (
+                await EmployeeViewModel.DefineFieldsAndReturnViewModel(filter,  searchString, 
+                page, await _employeeService.GetAllAsync())
+            );
         }
 
         public async Task<IActionResult> Create()
         {
-            List<Section> sectors = await _sectorService.FindAllAsync();
-            EmployeeViewModel viewModel = new() { Sections = sectors };
-
             ViewData["Title"] = "Administração de funcionários";
-            ViewData["Subtitle2"] = "Inserir novo";
+            ViewBag.Subtitle2 = "Inserir novo";
 
-            return View(viewModel);
+            return View(new CreateEmployeeViewModel(await _sectorService.GetAllAsync()));
         }
 
         [HttpPost]
@@ -50,38 +52,29 @@ namespace YourDressing.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            List<Section> sectors = await _sectorService.FindAllAsync();
-            EmployeeViewModel viewModel = new() { Employee = employee, Sections = sectors };
-
-            return View(viewModel);
+            return View(new CreateEmployeeViewModel(employee, await _sectorService.GetAllAsync()));
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-                return RedirectToAction(nameof(Error), new { message = "ID não fornecido." });
-
-            Employee employee = await _employeeService.FindByIdAsync(id);
-            if (employee == null)
-                return RedirectToAction(nameof(Error), new { message = "Não foi possível encontrar um funcionário com o ID fornecido." });
-
-            List<Section> sections = await _sectorService.FindAllAsync();
-            EmployeeViewModel viewModel = new()
+            Employee employee = new();
+            try
             {
-                Sections = sections
-            };
+                employee = await _employeeService.FindByIdAsync(id);
+            }
+            catch (ApplicationException error)
+            {
+                return RedirectToAction(nameof(Error), new { message = error });
+            }
 
             ViewData["Title"] = "Administração de funcionários";
-            ViewData["Subtitle2"] = "Editar funcionário";
-            return View(viewModel);
+            ViewBag.Subtitle2 = "Editar funcionário";
+            return View(new CreateEmployeeViewModel(employee, await _sectorService.GetAllAsync()));
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != employee.Id)
-                return RedirectToAction(nameof(Error), new { message = "O ID fornecido não corresponde ao ID do funcionário." });
-
             if (ModelState.IsValid)
             {
                 try
@@ -95,33 +88,43 @@ namespace YourDressing.Controllers
                 }
             }
 
-            List<Section> sections = await _sectorService.FindAllAsync();
-            EmployeeViewModel viewModel = new()
-            {
-                Sections = sections
-            };
-
             ViewData["Title"] = "Administração de funcionários";
-            ViewData["Subtitle2"] = "Editar funcionário";
-            return View(viewModel);
+            ViewBag.Subtitle2 = "Editar funcionário";
+            return View(new CreateEmployeeViewModel(await _sectorService.GetAllAsync()));
         }
 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            Employee employee = new();
+            try
+            {
+                employee = await _employeeService.FindByIdAsync(id);
+            }
+            catch (ApplicationException error)
+            {
+                return RedirectToAction(nameof(Error), new { message = error });
+            }
+
+
+            ViewData["Title"] = "Administração de funcionários";
+            ViewBag.Subtitle2 = "Detalhes do funcionário";
+            return View(employee);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-                return RedirectToAction(nameof(Error), new { message = "ID não fornecido" });
-
-            Employee employee = await _employeeService.FindByIdAsync(id);
-            if (employee == null)
-                return RedirectToAction(nameof(Error), new { message = "Não foi possível encontrar um funcionário com o ID fornecido." });
+            Employee employee = new();
+            try
+            {
+                employee = await _employeeService.FindByIdAsync(id);
+            }
+            catch (ApplicationException error)
+            {
+                return RedirectToAction(nameof(Error), new { message = error });
+            }
 
             ViewData["Title"] = "Administração de funcionários";
-            ViewData["Subtitle2"] = "Excluir funcionário: você tem certeza?";
+            ViewBag.Subtitle2 = "Excluir funcionário: você tem certeza?";
             return View(employee);
         }
 
@@ -143,12 +146,7 @@ namespace YourDressing.Controllers
         public IActionResult Error(string message)
         {
             string requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-            ErrorViewModel viewModel = new()
-            {
-                RequestId = requestId,
-                Message = message
-            };
-            return View(viewModel);
+            return View(new ErrorViewModel(requestId,  message));
         }
     }
 }

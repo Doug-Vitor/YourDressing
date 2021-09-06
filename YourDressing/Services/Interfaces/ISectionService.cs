@@ -6,6 +6,6 @@ namespace YourDressing.Services.Interfaces
 {
     public interface ISectionService
     {
-        public Task<List<Section>> FindAllAsync();
+        public Task<List<Section>> GetAllAsync();
     }
 }

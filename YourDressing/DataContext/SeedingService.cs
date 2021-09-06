@@ -25,13 +25,13 @@ namespace YourDressing.DataContext
             Section s4 = new("Acessórios", "Setor de vendas destinado a acessórios como óculos, bonés, etc.");
             Section s5 = new("Jóias", "Setor de vendas destinado a artigos de luxo, tais como: anéis, correntes, etc");
 
-            Employee e1 = new("Rosângela da Silva", s1, new DateTime(2000, 3, 25), 1299, false);
-            Employee e2 = new("Márcio de Souza", s1, new DateTime(2000, 3, 17), 1299, false);
-            Employee e3 = new("Robert Brown", s2, new DateTime(1986, 12, 8), 1299, false);
-            Employee e4 = new("Leandro Gonçalves", s2, new DateTime(2000, 7, 22), 1299, true);
-            Employee e5 = new("Alexandre Dias Pereira", s3, new DateTime(1995, 7, 28), 1299, true);
-            Employee e6 = new("Letícia Alves de Oliveira", s4, new DateTime(2004, 2, 13), 1299, false);
-            Employee e7 = new("Mario Alberto dos Anjos", s5, new DateTime(1997, 9, 14), 1299, false);
+            Employee e1 = new("Rosângela da Silva", new DateTime(2000, 3, 25), s1);
+            Employee e2 = new("Márcio de Souza", new DateTime(2000, 3, 17), s1);
+            Employee e3 = new("Robert Brown", new DateTime(1986, 12, 8), s2);
+            Employee e4 = new("Leandro Gonçalves", new DateTime(2000, 7, 22), s2) { IsMonthEmployee = true };
+            Employee e5 = new("Alexandre Dias Pereira", new DateTime(1995, 7, 28), s3) { IsMonthEmployee = true };
+            Employee e6 = new("Letícia Alves de Oliveira", new DateTime(2004, 2, 13), s4);
+            Employee e7 = new("Mario Alberto dos Anjos", new DateTime(1997, 9, 14), s5);
 
             Product product1 = new("Casaco moletom Lacoste", 369, s1);
             Product product2 = new("Calça moletom Adidas preta", 329, s1);

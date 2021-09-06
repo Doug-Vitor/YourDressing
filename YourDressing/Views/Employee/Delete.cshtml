@@ -1,6 +1,6 @@
 ﻿@model Employee
 
-@ViewData["Subtitle2"]
+<h3>@ViewBag.Subtitle2</h3>
 
 <div class="container">
     <div class="col-5">
@@ -17,10 +17,20 @@
         </fieldset>
 
         <wbr />
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
-            <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
-            <input type="submit" value="Confirmar" class="btn btn-danger" style="float:right" />
-        </form>
+        <div class="row">
+            <div class="container">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
+                    <input type="submit" value="Confirmar" class="btn btn-danger" style="float:right" />
+                </form>
+            </div>
+        </div>
     </div>
+
+    <p class="text-info">
+        Importante: ao confirmar a exclusão, este funcionário permanecerá nos
+        registros da empresa, mas será tratado como demitido. Esta é uma ação cautelosa para manter
+        a integridade de outros dados.
+    </p>
 </div>

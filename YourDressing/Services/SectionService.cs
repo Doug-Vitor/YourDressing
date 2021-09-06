@@ -16,7 +16,7 @@ namespace YourDressing
             _context = context;
         }
 
-        public async Task<List<Section>> FindAllAsync()
+        public async Task<List<Section>> GetAllAsync()
         {
             return await _context.Sections.ToListAsync();
         }

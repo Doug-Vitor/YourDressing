@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using YourDressing.Models.Enums;
 
 namespace YourDressing.Models
 {
@@ -16,6 +17,9 @@ namespace YourDressing.Models
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Campo {0} requirido")]
         public DateTime Birthdate { get; set; }
+
+        [DisplayName("Situação")]
+        public Situation Situation { get; set; }
 
         [DisplayName("Salário")]
         public double BaseSalary { get; set; }
@@ -33,14 +37,11 @@ namespace YourDressing.Models
         {
         }
 
-        public Employee(string name, Section section, DateTime birthdate, double baseSalary, 
-            bool isMonthEmployee)
+        public Employee(string name, DateTime birthdate, Section section)
         {
             Name = name;
-            Section = section;
             Birthdate = birthdate;
-            BaseSalary = baseSalary;
-            IsMonthEmployee = isMonthEmployee;
+            Section = section;
         }
 
         public void AddSale(Sale sale)
