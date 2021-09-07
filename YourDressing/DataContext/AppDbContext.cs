@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using YourDressing.Models;
 using YourDressing.Models.Enums;
 
@@ -14,7 +13,7 @@ namespace YourDressing.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>(employee => {
-                employee.Property(prop => prop.Situation).HasDefaultValue(Situation.Active);
+                employee.Property(prop => prop.Situation).HasDefaultValue(EmployeeSituation.Active);
                 employee.Property(prop => prop.IsMonthEmployee).HasDefaultValue(false);
                 employee.Property(prop => prop.BaseSalary).HasDefaultValue(1299);
             });

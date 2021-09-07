@@ -1,5 +1,10 @@
 ﻿@model Employee
 
+@{
+    ViewData["Title"] = "Administração de funcionários";
+    ViewBag.Subtitle2 = "Detalhes do funcionário";
+}
+
 <h3>@ViewBag.Subtitle2</h3>
 
 <div class="row">
@@ -15,26 +20,28 @@
         <label asp-for="Section" class="col-form-label mt-4"></label>
         <input class="form-control" type="text" placeholder="@Html.DisplayFor(model =>
                                                     model.Section.Name)" readonly="" />
-        <label asp-for="BaseSalary" class="col-form-label mt-4"></label>
-        <div class="input-group mb-3">
-            <span class="input-group-text">R$</span>
-            <input asp-for="BaseSalary" class="form-control" placeholder="@Html.DisplayFor(model =>
-                                                                 model.BaseSalary)" readonly="" />
-            <span class="input-group-text">,00</span>
-        </div>
-        <div class="form-group" style="display: inline">
-            <label asp-for="IsMonthEmployee" class="col-form-label mt-4"></label>
-            <input asp-for="IsMonthEmployee" type="radio" class="form-check-label" value="true" disabled/>
-            <span class="badge rounded-pill bg-primary align-content-center">Sim.</span>
-            <input asp-for="IsMonthEmployee" type="radio" class="form-check-label" value="false" disabled/>
-            <span class="badge rounded-pill bg-warning align-content-center">Não.</span>
-        </div>
+        @if (Model.Situation is EmployeeSituation.Active)
+        {
+            <label asp-for="BaseSalary" class="col-form-label mt-4"></label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">R$</span>
+                <input asp-for="BaseSalary" class="form-control" placeholder="@Html.DisplayFor(model =>
+                    model.BaseSalary)" readonly="" />
+                <span class="input-group-text">,00</span>
+            </div>
+            <div class="form-group" style="display: inline">
+                <label asp-for="IsMonthEmployee" class="col-form-label mt-4"></label>
+                <input asp-for="IsMonthEmployee" type="radio" class="form-check-label" value="true" disabled />
+                <span class="badge rounded-pill bg-primary align-content-center">Sim.</span>
+                <input asp-for="IsMonthEmployee" type="radio" class="form-check-label" value="false" disabled />
+                <span class="badge rounded-pill bg-warning align-content-center">Não.</span>
+            </div>
+        }
 
-        <div class="container">
-            <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Voltar</a>
-            <a class="btn btn-success" style="float: right" asp-action="Edit"
-               asp-route-id="@Model.Id">Editar</a>
+            <div class="container">
+                <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Voltar</a>
+                <a class="btn btn-success" style="float: right" asp-action="Edit"
+                   asp-route-id="@Model.Id">Editar</a>
+            </div>
         </div>
-    </div>
-    </div>
 </div>

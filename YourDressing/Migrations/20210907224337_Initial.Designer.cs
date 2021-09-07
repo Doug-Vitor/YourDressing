@@ -10,7 +10,7 @@ using YourDressing.DataContext;
 namespace YourDressing.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210904010212_Initial")]
+    [Migration("20210907224337_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,12 +101,12 @@ namespace YourDressing.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("SectorId")
+                    b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectorId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Products");
                 });
@@ -139,6 +139,7 @@ namespace YourDressing.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -146,6 +147,9 @@ namespace YourDressing.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Situation")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -180,11 +184,11 @@ namespace YourDressing.Migrations
 
             modelBuilder.Entity("YourDressing.Models.Product", b =>
                 {
-                    b.HasOne("YourDressing.Models.Section", "Sector")
+                    b.HasOne("YourDressing.Models.Section", "Section")
                         .WithMany()
-                        .HasForeignKey("SectorId");
+                        .HasForeignKey("SectionId");
 
-                    b.Navigation("Sector");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("YourDressing.Models.Sale", b =>

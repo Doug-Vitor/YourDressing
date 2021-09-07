@@ -14,7 +14,8 @@ namespace YourDressing.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Situation = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,14 +54,14 @@ namespace YourDressing.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    SectorId = table.Column<int>(type: "int", nullable: true)
+                    SectionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Sections_SectorId",
-                        column: x => x.SectorId,
+                        name: "FK_Products_Sections_SectionId",
+                        column: x => x.SectionId,
                         principalTable: "Sections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -129,9 +130,9 @@ namespace YourDressing.Migrations
                 column: "SaleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_SectorId",
+                name: "IX_Products_SectionId",
                 table: "Products",
-                column: "SectorId");
+                column: "SectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sales_EmployeeId",

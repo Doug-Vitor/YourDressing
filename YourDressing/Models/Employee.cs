@@ -9,17 +9,17 @@ namespace YourDressing.Models
     public class Employee : Entity
     {
         [DisplayName("Nome completo")]
-        [Required(ErrorMessage = "Campo {0} requirido.")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Campo {0} deve conter entre {2} e {1} caracteres.")]
+        [Required(ErrorMessage = "O campo {0} é requirido.")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "O campo {0} deve conter entre {2} e {1} caracteres.")]
         public string Name { get; set; }
 
         [DisplayName("Data de nascimento")]
         [DataType(DataType.Date)]
-        [Required(ErrorMessage = "Campo {0} requirido")]
+        [Required(ErrorMessage = "O campo {0} é requirido")]
         public DateTime Birthdate { get; set; }
 
         [DisplayName("Situação")]
-        public Situation Situation { get; set; }
+        public EmployeeSituation Situation { get; set; }
 
         [DisplayName("Salário")]
         public double BaseSalary { get; set; }

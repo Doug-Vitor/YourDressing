@@ -1,5 +1,9 @@
 ﻿@model CreateEmployeeViewModel
 
+@{
+    ViewData["Title"] = "Administração de funcionários";
+    ViewBag.Subtitle2 = "Inserir novo";
+}
 
 <h3>@ViewBag.Subtitle2</h3>
 
@@ -13,14 +17,14 @@
                 <span asp-validation-for="Employee.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee.Section" class="col-form-label mt-4"></label>
-                <select asp-for="Employee.SectionId" asp-items="@(new SelectList(Model.Sections,"Id","Name"))"
-                        class="form-control"></select>
-            </div>
-            <div class="form-group">
                 <label asp-for="Employee.Birthdate" class="col-form-label mt-4"></label>
                 <input asp-for="Employee.Birthdate" class="form-control" />
                 <span asp-validation-for="Employee.Birthdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employee.Section" class="col-form-label mt-4"></label>
+                <select asp-for="Employee.SectionId" asp-items="@(new SelectList(Model.Sections,"Id","Name"))"
+                        class="form-control"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Employee.BaseSalary" class="col-form-label mt-4"></label>
@@ -31,10 +35,10 @@
                     <span asp-validation-for="Employee.BaseSalary" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
+            <div>
                 <a class="btn btn-outline-dark" style="float: right" asp-action="Index">Cancelar</a>
             </div>
-            <div>
+            <div class="form-group">
                 <input type="submit" class="btn btn-success" value="Confirmar" style="float: right" />
             </div>
         </form>

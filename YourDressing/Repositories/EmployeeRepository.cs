@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using YourDressing.DataContext;
 using YourDressing.Models;
 using YourDressing.Models.Enums;
-using YourDressing.Services.Exceptions;
-using YourDressing.Services.Interfaces;
+using YourDressing.Repositories.Exceptions;
+using YourDressing.Repositories.Interfaces;
 
-namespace YourDressing.Services
+namespace YourDressing.Repositories
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _context;
 
-        public EmployeeService(AppDbContext context)
+        public EmployeeRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace YourDressing.Services
         public async Task<List<Employee>> GetAllAsync()
         {
             return await _context.Employees.Include(prop => prop.Section)
-                .Where(prop => prop.Situation == Situation.Active).OrderBy(x => x.Section.Name)
+                .Where(prop => prop.Situation == EmployeeSituation.Active).OrderBy(x => x.Section.Name)
                 .ToListAsync();
         }
 
@@ -38,15 +38,22 @@ namespace YourDressing.Services
                 .Where(prop => prop.IsMonthEmployee).OrderBy(x => x.Section.Name).ToListAsync();
         }
 
+        public async Task<List<Employee>> GetFiredEmployeesAsync()
+        {
+            return await _context.Employees.Include(prop => prop.Section)
+                .Where(prop => prop.Situation == EmployeeSituation.Fired)
+                .OrderBy(prop => prop.Section.Name).ToListAsync();
+        }
+
         public async Task<Employee> FindByIdAsync(int? id)
         {
-            if (id == null)
+            if (id is null)
                 throw new IdNotProvidedException("ID não fornecido");
 
             Employee employee = await _context.Employees.Include(prop => prop.Section).Where(prop => prop.Id == id)
                 .FirstOrDefaultAsync();
-            if (employee == null)
-                throw new NotFoundException("Não foi possível encontrar um funcionário com o ID fornecido.");
+            if (employee is null)
+                throw new NotFoundException("Não foi possível encontrar um funcionário correspondente ao ID fornecido.");
 
             return employee;
         }
@@ -71,8 +78,9 @@ namespace YourDressing.Services
         public async Task RemoveAsync(int id)
         {
             Employee employee = await FindByIdAsync(id);
-            employee.Situation = Situation.Fired;
+            employee.Situation = EmployeeSituation.Fired;
             employee.IsMonthEmployee = false;
+            employee.BaseSalary = 0.0;
 
             _context.Update(employee);
             await _context.SaveChangesAsync();

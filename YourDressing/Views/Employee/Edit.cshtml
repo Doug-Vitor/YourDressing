@@ -1,5 +1,10 @@
 ﻿@model CreateEmployeeViewModel
 
+@{
+    ViewData["Title"] = "Administração de funcionários";
+    ViewBag.Subtitle2 = "Editar funcionário";
+}
+
 
 <h3>@ViewBag.Subtitle2</h3>
 
@@ -13,36 +18,57 @@
                 <input asp-for="Employee.Name" class="form-control" />
                 <span asp-validation-for="Employee.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee.Section" class="col-form-label mt-4"></label>
-                <select asp-for="Employee.SectionId" asp-items="@(new SelectList(Model.Sections,"Id","Name"))"
-                        class="form-control"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Employee.Birthdate" class="col-form-label mt-4"></label>
-                <input asp-for="Employee.Birthdate" class="form-control" />
-                <span asp-validation-for="Employee.Birthdate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Employee.BaseSalary" class="col-form-label mt-4"></label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">R$</span>
-                    <input asp-for="Employee.BaseSalary" class="form-control" aria-label="Quantidade" />
-                    <span class="input-group-text">,00</span>
-                    <span asp-validation-for="Employee.BaseSalary" class="text-danger"></span>
+
+            @if (Model.Employee.Situation is EmployeeSituation.Active)
+            {
+                <div class="form-group">
+                    <label asp-for="Employee.Birthdate" class="col-form-label mt-4"></label>
+                    <input asp-for="Employee.Birthdate" class="form-control" />
+                    <span asp-validation-for="Employee.Birthdate" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="form-group" style="display: inline">
-                <label asp-for="Employee.IsMonthEmployee" class="col-form-label mt-4"></label>
-                <input asp-for="Employee.IsMonthEmployee" type="radio" class="form-check-label" value="true" />
-                <span class="badge rounded-pill bg-primary align-content-center">Sim.</span>
-                <input asp-for="Employee.IsMonthEmployee" type="radio" class="form-check-label" value="false" />
-                <span class="badge rounded-pill bg-warning align-content-center">Não.</span>
-            </div>
-            <div class="form-group">
+            }
+            @if (Model.Employee.Situation is EmployeeSituation.Fired)
+            {
+                <div class="form-group">
+                    <label asp-for="Employee.Situation" class="col-form-label mt-4"></label>
+                    <select asp-for="Employee.Situation" asp-items="Html.GetEnumSelectList<EmployeeSituation>()" 
+                            class="form-control"></select>
+                </div>
+            }
+            @if (Model.Employee.Situation is EmployeeSituation.Active)
+            {
+                <div class="form-group">
+                    <label asp-for="Employee.Section" class="col-form-label mt-4"></label>
+                    <select asp-for="Employee.SectionId" asp-items="@(new SelectList(Model.Sections,"Id","Name"))"
+                            class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Employee.BaseSalary" class="col-form-label mt-4"></label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">R$</span>
+                        <input asp-for="Employee.BaseSalary" class="form-control" aria-label="Quantidade" />
+                        <span class="input-group-text">,00</span>
+                        <span asp-validation-for="Employee.BaseSalary" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: inline">
+                    <label asp-for="Employee.IsMonthEmployee" class="col-form-label mt-4"></label>
+                    <input asp-for="Employee.IsMonthEmployee" type="radio" class="form-check-label" value="true" />
+                    <span class="badge rounded-pill bg-primary align-content-center">Sim.</span>
+                    <input asp-for="Employee.IsMonthEmployee" type="radio" class="form-check-label" value="false" />
+                    <span class="badge rounded-pill bg-warning align-content-center">Não.</span>
+                </div>
+            }
+            <div>
                 <a class="btn btn-outline-dark" style="float: right" asp-action="Index">Cancelar</a>
             </div>
-            <div>
+            <div class="form-group">
+                @if (Model.Employee.Situation is EmployeeSituation.Fired)
+                {
+                    <input type="hidden" asp-for="Employee.Birthdate" />
+                    <input type="hidden" asp-for="Employee.SectionId" />
+                }
                 <input type="submit" class="btn btn-success" value="Confirmar" style="float: right" />
             </div>
         </form>

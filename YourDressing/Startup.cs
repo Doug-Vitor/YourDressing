@@ -5,8 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using YourDressing.DataContext;
-using YourDressing.Services;
-using YourDressing.Services.Interfaces;
+using YourDressing.Repositories;
+using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing
 {
@@ -28,8 +28,8 @@ namespace YourDressing
                 .GetConnectionString("Default")));
 
             services.AddScoped<SeedingService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<ISectionRepository, SectionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

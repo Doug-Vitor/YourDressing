@@ -6,40 +6,50 @@ using System.Threading.Tasks;
 using X.PagedList;
 using YourDressing.Models;
 using YourDressing.Models.ViewModels;
-using YourDressing.Services.Exceptions;
-using YourDressing.Services.Interfaces;
+using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly ISectionService _sectorService;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ISectionRepository _sectionRepository;
 
-        public EmployeeController(IEmployeeService employeeService, ISectionService sectorService)
+        public EmployeeController(IEmployeeRepository employeeService, ISectionRepository sectionService)
         {
-            _employeeService = employeeService;
-            _sectorService = sectorService;
+            _employeeRepository = employeeService;
+            _sectionRepository = sectionService;
         }
 
-        public async Task<IActionResult> Index(string filter, string searchString, int? page)
+        public async Task<IActionResult> Index(int? page, string searchString)
         {
-            if (filter is null)
-               filter = "All";
+            List<Employee> employees;
+            if (searchString is null)
+                employees = await _employeeRepository.GetAllAsync();
+            else
+            {
+                employees = await _employeeRepository.FindByNameAsync(searchString);
+                ViewBag.SearchString = searchString;
+            }
 
-            return View
-            (
-                await EmployeeViewModel.DefineFieldsAndReturnViewModel(filter,  searchString, 
-                page, await _employeeService.GetAllAsync())
-            );
+            return View(await employees.ToPagedListAsync(page ?? 1, 5));
+        }
+
+        public async Task<IActionResult> MonthEmployees(int? page)
+        {
+            List<Employee> employees = await _employeeRepository.GetMonthEmployeesAsync();
+            return View(await employees.ToPagedListAsync(page ?? 1, 5));
+        }
+
+        public async Task<IActionResult> FiredEmployees(int? page)
+        {
+            List<Employee> employees = await _employeeRepository.GetFiredEmployeesAsync();
+            return View(employees.ToPagedList(page ?? 1, 5));
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewData["Title"] = "Administração de funcionários";
-            ViewBag.Subtitle2 = "Inserir novo";
-
-            return View(new CreateEmployeeViewModel(await _sectorService.GetAllAsync()));
+            return View(new CreateEmployeeViewModel(await _sectionRepository.GetAllAsync()));
         }
 
         [HttpPost]
@@ -48,11 +58,11 @@ namespace YourDressing.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _employeeService.InsertAsync(employee);
+                await _employeeRepository.InsertAsync(employee);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(new CreateEmployeeViewModel(employee, await _sectorService.GetAllAsync()));
+            return View(new CreateEmployeeViewModel(employee, await _sectionRepository.GetAllAsync()));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -60,37 +70,27 @@ namespace YourDressing.Controllers
             Employee employee = new();
             try
             {
-                employee = await _employeeService.FindByIdAsync(id);
+                employee = await _employeeRepository.FindByIdAsync(id);
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error });
             }
 
-            ViewData["Title"] = "Administração de funcionários";
-            ViewBag.Subtitle2 = "Editar funcionário";
-            return View(new CreateEmployeeViewModel(employee, await _sectorService.GetAllAsync()));
+            return View(new CreateEmployeeViewModel(employee, await _sectionRepository.GetAllAsync()));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Employee employee)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Employee employee)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _employeeService.UpdateAsync(employee);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (ApplicationException error)
-                {
-                    return RedirectToAction(nameof(Error), new { message = error.Message });
-                }
+                await _employeeRepository.UpdateAsync(employee);
+                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Title"] = "Administração de funcionários";
-            ViewBag.Subtitle2 = "Editar funcionário";
-            return View(new CreateEmployeeViewModel(await _sectorService.GetAllAsync()));
+            return View(new CreateEmployeeViewModel(await _sectionRepository.GetAllAsync()));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -98,16 +98,13 @@ namespace YourDressing.Controllers
             Employee employee = new();
             try
             {
-                employee = await _employeeService.FindByIdAsync(id);
+                employee = await _employeeRepository.FindByIdAsync(id);
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error });
             }
 
-
-            ViewData["Title"] = "Administração de funcionários";
-            ViewBag.Subtitle2 = "Detalhes do funcionário";
             return View(employee);
         }
 
@@ -116,15 +113,13 @@ namespace YourDressing.Controllers
             Employee employee = new();
             try
             {
-                employee = await _employeeService.FindByIdAsync(id);
+                employee = await _employeeRepository.FindByIdAsync(id);
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error });
             }
 
-            ViewData["Title"] = "Administração de funcionários";
-            ViewBag.Subtitle2 = "Excluir funcionário: você tem certeza?";
             return View(employee);
         }
 
@@ -132,15 +127,8 @@ namespace YourDressing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _employeeService.RemoveAsync(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (IntegrityException error)
-            {
-                return RedirectToAction(nameof(Error), new { message = error.Message });
-            }
+            await _employeeRepository.RemoveAsync(id);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Error(string message)

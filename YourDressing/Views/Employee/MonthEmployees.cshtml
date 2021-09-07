@@ -1,0 +1,27 @@
+﻿@model IPagedList<Employee>
+
+@{
+    ViewData["Title"] = "Administração de funcionários";
+    ViewBag.Subtitle2 = "Funcionários do mês";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="container" style="display:inline-block">
+    <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Todos os funcionários</a>
+</div>
+
+<div class="row">
+    <div class="container">
+        <partial name="_EmployeesPartial" for="@Model" />
+    </div>
+</div>
+
+@if (Model.PageCount > 1)
+{
+    <div class="container" style="display:inline-block">
+        <h5 style="float: left">Página @Model.PageNumber de @Model.PageCount</h5>
+        @Html.PagedListPager(Model, page => Url.Action("MonthEmployees", new { page = page }),
+                Bootstrap4PagedListRenderOptions.Classic)
+    </div>
+}

@@ -1,36 +1,39 @@
 ﻿@model Employee
 
+@{
+ViewData["Title"] = "Administração de funcionários";
+ViewBag.Subtitle2 = "Excluir funcionário: você tem certeza?";
+}
+
 <h3>@ViewBag.Subtitle2</h3>
 
 <div class="container">
-    <div class="col-5">
-        <fieldset>
-            <label asp-for="Name" class="form-label mt-4"></label>
-            <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Name)"
-                   readonly="" />
-            <label asp-for="Birthdate" class="form-label mt-4"></label>
-            <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Birthdate)"
-                   readonly="" />
-            <label asp-for="Section" class="form-label mt-4"></label>
-            <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Section.Name)"
-                   readonly="" />
-        </fieldset>
+    <div class="col-5" style="display:inline-block">
+        <label asp-for="Name" class="form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Model.Name" readonly="" />
+
+        <label asp-for="Birthdate" class="form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Model.Birthdate" readonly="" />
+
+        <label asp-for="Section" class="form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Model.Section.Name"
+                readonly="" />
 
         <wbr />
-        <div class="row">
-            <div class="container">
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="Id" />
-                    <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
-                    <input type="submit" value="Confirmar" class="btn btn-danger" style="float:right" />
-                </form>
-            </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
         </div>
+        <form asp-action="Delete">
+            <div class="form-group">
+                <input asp-for="Id" type="hidden" />
+                <input type="submit" value="Confirmar" class="btn btn-danger" style="float:right" />
+            </div>
+        </form>
     </div>
-
-    <p class="text-info">
-        Importante: ao confirmar a exclusão, este funcionário permanecerá nos
-        registros da empresa, mas será tratado como demitido. Esta é uma ação cautelosa para manter
-        a integridade de outros dados.
-    </p>
 </div>
+
+<p class="text-info">
+    Importante: Este funcionário não será removido dos registros caso tenha vendas atreladas a ele, 
+    mas será tratado como demitido. Caso isso ocorra, você poderá encontrá-lo neste sistema e, 
+    eventualmente, recontratá-lo. Esta é uma ação cautelosa para manter a integridade de outros dados.
+</p>

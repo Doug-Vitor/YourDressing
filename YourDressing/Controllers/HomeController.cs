@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using YourDressing.Services.Interfaces;
+using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeRepository _employeeService;
 
-        public HomeController(IEmployeeService employeeService)
+        public HomeController(IEmployeeRepository employeeService)
         {
             _employeeService = employeeService;
         }

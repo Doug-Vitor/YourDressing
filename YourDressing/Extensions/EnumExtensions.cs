@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace System
 {
-    public class EnumExtensions
+    public static class EnumExtensions
     {
         public static string GetDescription(Enum value)
         {

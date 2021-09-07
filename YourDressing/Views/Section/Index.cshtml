@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Section>
+
+@{ 
+    ViewData["Title"] = "Administração de seções";
+    ViewBag.Subtitle2 = "Lista de seções";
+}
+
+<div class="row">
+    <div class="container" style="display: inline-block">
+        <h3 style="float: left">@ViewBag.Subtitle2</h3>
+        <a class="btn btn-danger" style="float:right" asp-action="Disabled">Seções desativadas</a>
+        <a class="btn btn-outline-dark" style="float: right" asp-controller="Section" asp-action="Create">
+            Criar nova
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-bordered table-striped text-center">
+        <thead>
+            <tr class="table-dark">
+                <th scope="row">@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Section item in Model)
+            {
+            <tr>
+                <td class="text-center">@item.Name</td>
+                <td class="text-center" style="max-width: 400px">@item.Description</td>
+                <td class="text-center">
+                    <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                    <a class="text-dark text-decoration-underline" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                    <a class="text-dark text-decoration-underline" asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

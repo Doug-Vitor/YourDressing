@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourDressing.Services.Exceptions
+namespace YourDressing.Repositories.Exceptions
 {
     public class IdNotProvidedException : ApplicationException
     {

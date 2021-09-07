@@ -1,0 +1,38 @@
+﻿@model Section
+
+@{
+    ViewData["Title"] = "Administração de funcionários";
+    ViewBag.Subtitle2 = "Excluir seção: você tem certeza?";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="container">
+    <div class="col-10" style="display:inline-block">
+        <form asp-action="Delete">
+            <div class="form-group">
+                <label asp-for="Name" class="col-form-label mt-4"></label>
+                <input asp-for="Name" class="form-control" type="text" style="width: 250px" placeholder="@Model.Name" readonly="" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="col-form-label mt-4"></label>
+                <input asp-for="Description" class="form-control" type="text" placeholder="@Model.Description" readonly="" />
+            </div>
+
+            <wbr />
+            <div>
+                <a class="btn btn-outline-dark" style="float:right;" asp-action="Index">Cancelar</a>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Confirmar" style="float:right" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<p class="text-info">
+    Importante: Esta seção não será removida dos registros caso tenha funcionários ou vendas atreladas a 
+    ela, mas será tratada como inoperante. Caso isso ocorra, você poderá encontrá-la neste sistema e, 
+    eventualmente, reativá-la. Esta é uma ação cautelosa para manter a integridade de outros dados.
+</p>

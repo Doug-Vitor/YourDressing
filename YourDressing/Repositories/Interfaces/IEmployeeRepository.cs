@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using YourDressing.Models;
-using YourDressing.Models.ViewModels;
 
-namespace YourDressing.Services.Interfaces
+namespace YourDressing.Repositories.Interfaces
 {
-    public interface IEmployeeService
+    public interface IEmployeeRepository
     {
         public Task InsertAsync(Employee employee);
         public Task<List<Employee>> GetAllAsync();
         public Task<List<Employee>> GetMonthEmployeesAsync();
+        public Task<List<Employee>> GetFiredEmployeesAsync();
         public Task<List<Employee>> FindByNameAsync(string name);
         public Task<Employee> FindByIdAsync(int? id);
         public Task UpdateAsync(Employee employee);

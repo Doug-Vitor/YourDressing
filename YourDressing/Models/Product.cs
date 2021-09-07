@@ -12,17 +12,17 @@ namespace YourDressing.Models
 
         [DisplayName("Preço")]
         public double Price { get; set; }
-        public virtual Section Sector { get; set; }
+        public virtual Section Section { get; set; }
 
         public Product()
         {
         }
 
-        public Product(string name, double price, Section sector)
+        public Product(string name, double price, Section section)
         {
             Name = name;
             Price = price;
-            Sector = sector;
+            Section = section;
         }
     }
 }
