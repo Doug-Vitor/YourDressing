@@ -66,7 +66,7 @@ namespace YourDressing.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -99,7 +99,7 @@ namespace YourDressing.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("SectionId")
+                    b.Property<int>("SectionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -116,7 +116,7 @@ namespace YourDressing.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EmployeeId")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
@@ -137,12 +137,10 @@ namespace YourDressing.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -169,7 +167,9 @@ namespace YourDressing.Migrations
                 {
                     b.HasOne("YourDressing.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("YourDressing.Models.Sale", "Sale")
                         .WithMany("OrderProducts")
@@ -183,8 +183,10 @@ namespace YourDressing.Migrations
             modelBuilder.Entity("YourDressing.Models.Product", b =>
                 {
                     b.HasOne("YourDressing.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId");
+                        .WithMany("Products")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Section");
                 });
@@ -193,7 +195,9 @@ namespace YourDressing.Migrations
                 {
                     b.HasOne("YourDressing.Models.Employee", "Employee")
                         .WithMany("Sales")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
                 });
@@ -211,6 +215,8 @@ namespace YourDressing.Migrations
             modelBuilder.Entity("YourDressing.Models.Section", b =>
                 {
                     b.Navigation("Employee");
+
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

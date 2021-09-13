@@ -37,11 +37,16 @@ namespace YourDressing.Models
         {
         }
 
-        public Employee(string name, DateTime birthdate, Section section)
+        public Employee(string name, DateTime birthdate, double baseSalary)
         {
             Name = name;
             Birthdate = birthdate;
-            Section = section;
+            BaseSalary = baseSalary;
+        }
+
+        public string GetEmployeeFirstName()
+        {
+            return Name.Substring(0, Name.IndexOf(' '));
         }
 
         public void AddSale(Sale sale)

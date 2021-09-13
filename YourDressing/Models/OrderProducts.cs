@@ -1,20 +1,32 @@
-﻿namespace YourDressing.Models
+﻿using System.ComponentModel;
+
+namespace YourDressing.Models
 {
     public class OrderProducts
     {
         public int Id { get; set; }
-        public virtual Product Product { get; set; }
-        public int Quantity { get; set; }
-        public virtual Sale Sale { get; set; }
+        public int ProductId { get; set; }
 
+        [DisplayName("Nome do produto")]
+        public virtual Product Product { get; set; }
+
+        [DisplayName("Quantidade")]
+        public int Quantity { get; set; }
+        public Sale Sale { get; set; }
+        
         public OrderProducts()
         {
         }
 
-        public OrderProducts(Product product, int quantity)
+        public OrderProducts (int productId, int quantity)
         {
-            Product = product;
+            ProductId = productId;
             Quantity = quantity;
+        }
+
+        public double GetTotalPrice()
+        {
+            return Product.Price * Quantity;
         }
     }
 }

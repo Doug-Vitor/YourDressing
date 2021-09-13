@@ -15,9 +15,9 @@
                 <td class="text-center">@employee.Name</td>
                 <td class="text-center">@employee.Section.Name</td>
                 <td class="text-center">
-                    <a asp-controller="Employee" asp-action="Details"
+                    <a asp-controller="Employees" asp-action="Details"
                        asp-route-id="@employee.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Detalhes</a>
-                    <a asp-controler="Employee" asp-action="Edit" asp-route-id="@employee.Id" 
+                    <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" 
                         class="text-dark text-decoration-underline" style="text-decoration: none">Editar</a>
                 </td>
             </tr>

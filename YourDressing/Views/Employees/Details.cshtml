@@ -5,10 +5,13 @@
     ViewBag.Subtitle2 = "Detalhes do funcionário";
 }
 
-<h3>@ViewBag.Subtitle2</h3>
+<div class="container" style="display:inline-block">
+    <h3 style="float:left">@ViewBag.Subtitle2</h3>
+    <a class="btn btn-info" style="float:right" asp-action="EmployeeSales" asp-route-id="@Model.Id">Vendas desse funcionário</a>
+</div>
 
 <div class="row">
-    <div class="col-5">
+    <div class="col-8">
         <label asp-for="Name" class="col-form-label mt-4"></label>
         <input class="form-control" type="text" placeholder="@Html.DisplayFor(model =>
                                                     model.Name)" readonly="" />

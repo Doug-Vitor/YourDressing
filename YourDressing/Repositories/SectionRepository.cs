@@ -42,11 +42,21 @@ namespace YourDressing.Repositories
             if (id is null)
                 throw new IdNotProvidedException("ID não fornecido.");
 
-            Section section = await _context.Sections.Where(prop => prop.Id == id).FirstOrDefaultAsync();
+            Section section = await _context.Sections.FindAsync(id);
             if (section is null)
                 throw new NotFoundException("Não foi possível encontrar uma seção correspondente ao ID fornecido.");
 
             return section;
+        }
+
+        public async Task<List<Employee>> GetSectionEmployeesAsync(int id)
+        {
+            return await _context.Employees.Where(prop => prop.SectionId == id).ToListAsync();
+        }
+
+        public async Task<List<Sale>> GetSectionSalesAsync(int id)
+        {
+            return await _context.Sales.Where(prop => prop.Employee.SectionId == id).ToListAsync();
         }
 
         public async Task UpdateAsync(Section section)
@@ -60,11 +70,6 @@ namespace YourDressing.Repositories
             section.Situation = SectionSituation.Disabled;
             _context.Update(section);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<List<Employee>> GetSectionEmployees(int id)
-        {
-            return await _context.Employees.Where(prop => prop.SectionId == id).ToListAsync();
         }
     }
 }

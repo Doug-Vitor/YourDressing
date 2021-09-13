@@ -1,0 +1,33 @@
+﻿@model Product
+
+@{ 
+    ViewData["Title"] = "Administração de produtos";
+    ViewBag.Subtitle2 = "Excluir produto: você tem certeza?";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="container">
+    <div class="col-8">
+        <form asp-action="Delete">
+            <div class="form-group">
+                <label asp-for="Name" class="col-form-label mt-4"></label>
+                <input asp-for="Name" class="form-control" type="text" placeholder="@Model.Name" readonly="" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="col-form-label mt-4"></label>
+                <input asp-for="Price" class="form-control" type="text" 
+                       placeholder="R$ @Model.Price" readonly="" />
+            </div>
+
+            <div class="container" style="display: inline-block">
+                <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" class="btn btn-danger" style="float:right" value="Confirmar" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

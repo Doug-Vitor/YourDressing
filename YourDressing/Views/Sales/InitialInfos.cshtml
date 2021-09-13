@@ -1,0 +1,32 @@
+﻿@model SelectList
+
+@{
+    ViewData["Title"] = "Administração de vendas";
+    ViewBag.Subtitle2 = "Criar nova venda: informações iniciais";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="container">
+    <form asp-action="InitialInfos">
+        <div class="col-5" style="display: inline-block;">
+            <div class="form-group">
+                <label class="col-form-label mt-4">A quem será atribuído(a) essa venda?</label>
+                <select class="form-control" asp-items="Model" name="employeeId"></select>
+            </div>
+        </div>
+
+        <div class="col-5" style="display: inline-block;">
+            <div class="form-group">
+                <label class="col-form-label mt-4">Quantos produtos distintos foram vendidos?</label>
+                <input type="number" class="form-control" required="" style="max-width:200px" name="itemsQuantity"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-success" style="float:right" value="Confirmar" />
+        </div>
+    </form>
+
+    <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
+</div>

@@ -1,0 +1,31 @@
+﻿@model Sale
+
+@{ 
+    ViewData["Title"] = "Administração de vendas";
+    ViewBag.Subtitle2 = "Excluir venda: você tem certeza?";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="row">
+    <div class="col-8">
+        <label asp-for="Id" class="col-form-label mt-4"></label>
+        <input class="form-control" placeholder="@Html.DisplayFor(model => model.Id)" readonly="" />
+
+        <label asp-for="Employee" class="col-form-label mt-4"></label>
+        <input class="form-control" placeholder="@Html.DisplayFor(model => model.Employee.Name)" readonly="" />
+
+        <label asp-for="OrderProducts.First().Quantity" class="col-form-label mt-4"></label>
+        <input class="form-control" placeholder="@Html.DisplayFor(model => model.OrderProducts.First().Quantity)" readonly="" />
+
+        <label asp-for="TotalPrice" class="col-form-label mt-4"></label>
+        <input class="form-control" placeholder="@Html.DisplayFor(model => model.TotalPrice)" readonly="" />
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+
+            <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Cancelar</a>
+            <input type="submit" class="btn btn-danger" style="float:right" value="Confirmar" />
+        </form>
+    </div>
+</div>

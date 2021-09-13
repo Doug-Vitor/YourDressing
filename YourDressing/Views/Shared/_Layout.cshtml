@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Your Dressing</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-lux.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
     <header>
@@ -21,10 +22,16 @@
                             <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Início</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-controller="Employee" asp-action="Index">Funcionários</a>
+                            <a class="nav-link active" asp-area="" asp-controller="Employees" asp-action="Index">Funcionários</a>
                         </li>
                         <li class="nav-item dropdown">
                             @await Component.InvokeAsync("SectionMenu")
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Products" asp-action="Index">Produtos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Sales" asp-action="Index">Vendas</a>
                         </li>
                     </ul>
                 </div>

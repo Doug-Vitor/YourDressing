@@ -1,0 +1,24 @@
+﻿@model IPagedList<Sale>
+
+<table class="table table-striped table-bordered text-center">
+    <thead>
+        <tr class="table-dark">
+            <th scope="row">@Html.DisplayNameFor(model => model.First().Id)</th>
+            <th>@Html.DisplayNameFor(model => model.First().TotalPrice)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Sale sale in Model)
+        {
+            <tr>
+                <td>@sale.Id</td>
+                <td>@sale.TotalPrice</td>
+                <td>
+                    <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-controller="Sales" asp-action="Details" asp-route-id="@sale.Id">Detalhes</a>
+                    <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-controller="Sales" asp-action="Edit" asp-route-id="@sale.Id">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -2,26 +2,26 @@
 
 namespace YourDressing.Models.ViewModels
 {
-    public class CreateEmployeeViewModel
+    public class EmployeeInputViewModel
     {
         public Employee Employee { get; set; }
         public List<Section> Sections { get; set; }
 
-        public CreateEmployeeViewModel()
+        public EmployeeInputViewModel()
         {
         }
 
-        public CreateEmployeeViewModel(Employee employee)
+        public EmployeeInputViewModel(Employee employee)
         {
             Employee = employee;
         }
 
-        public CreateEmployeeViewModel(List<Section> sections)
+        public EmployeeInputViewModel(List<Section> sections)
         {
             Sections = sections;
         }
 
-        public CreateEmployeeViewModel(Employee employee, List<Section> sections) : this(employee)
+        public EmployeeInputViewModel(Employee employee, List<Section> sections) : this(employee)
         {
             Sections = sections;
         }

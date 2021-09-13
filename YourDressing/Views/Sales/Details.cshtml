@@ -1,0 +1,55 @@
+﻿@model Sale
+
+@{ 
+    ViewData["Title"] = "Administração de vendas";
+    ViewBag.Subtitle2 = "Detalhes da venda";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="row">
+    <div class="col-12">
+        <label asp-for="Id" class="col-form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Id)" readonly=""
+               style="width: 100px" />
+
+        <label class="col-form-label mt-4">Produtos da venda:</label>
+        <div class="container">
+            @foreach (OrderProducts product in Model.OrderProducts)
+            {
+                <div class="col-6" style="display: inline-block">
+                    <label asp-for="@product.Product" class="col-form-label mt-4"></label>
+                    <input class="form-control" type="text" placeholder="@product.Product.Name" readonly="" />
+                </div>
+
+                <div class="col-2" style="display: inline-block">
+                    <label class="col-form-label mt-4" asp-for="@product.Quantity"></label>
+                    <input class="form-control" type="text" placeholder="@product.Quantity" readonly="" />
+                </div>
+
+                <div class="col-2" style="display: inline-block">
+                    <label class="col-form-label mt-4" asp-for="TotalPrice"></label>
+                    <input class="form-control" type="text" placeholder="@product.GetTotalPrice()" readonly="" />
+                </div>
+            }
+        </div>
+
+        <div class="container">
+                <label class="col-form-label mt-4">Preço total da venda:</label>
+            <div class="col-6" style="display:inline-block">
+                <input class="form-control" style="width:200px" type="text"
+                       placeholder="R$ @Html.DisplayFor(model => model.TotalPrice)" readonly="" />
+            </div>
+        </div>
+
+        <label asp-for="Employee" class="col-form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Employee.Name)"
+               readonly="" style="width:500px">
+
+        <div class="container" style="display:inline-block">
+            <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Cancelar</a>
+            <a class="btn btn-info" style="float:right" asp-controller="Employees" asp-action="Details" asp-route-id="@Model.EmployeeId">Detalhes do funcionário</a>
+            <a class="btn btn-success" style="float:right" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+        </div>
+    </div>
+</div>

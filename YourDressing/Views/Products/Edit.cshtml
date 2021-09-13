@@ -1,0 +1,44 @@
+﻿@model ProductInputViewModel
+
+@{ 
+    ViewData["Title"] = "Administração de produtos";
+    ViewBag.Subtitle = "Editar produto";
+}
+
+<h3>@ViewBag.Subtitle2</h3>
+
+<div class="row">
+    <div class="col-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Product.Name" class="col-form-label mt-4"></label>
+                <input class="form-control" asp-for="Product.Name" />
+                <span asp-validation-for="Product.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Product.Price" class="col-form-label mt-4"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">R$</span>
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span class="input-group-text">,00</span>
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Product.Section" class="col-form-label mt-4"></label>
+                <select class="form-control" asp-for="Product.SectionId" 
+                        asp-items="@(new SelectList(Model.Sections, "Id", "Name"))"></select>
+            </div>
+
+            <div>
+                <a asp-action="Index" class="btn btn-outline-dark" style="float: right">Cancelar</a>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Confirmar" style="float:right" />
+            </div>
+        </form>
+    </div>
+</div>

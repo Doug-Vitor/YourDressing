@@ -10,7 +10,8 @@ namespace YourDressing.Repositories.Interfaces
         public Task<List<Section>> GetAllAsync();
         public Task<List<Section>> GetDisabledSectionsAsync();
         public Task<Section> FindByIdAsync(int? id);
-        public Task<List<Employee>> GetSectionEmployees(int id);
+        public Task<List<Employee>> GetSectionEmployeesAsync(int id);
+        public Task<List<Sale>> GetSectionSalesAsync(int id);
         public Task UpdateAsync(Section section);
         public Task RemoveAsync(Section section);
     }

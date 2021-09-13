@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 using YourDressing.Models;
@@ -11,106 +10,93 @@ using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing.Controllers
 {
-    public class SectionController : Controller
+    public class ProductsController : Controller
     {
+        private readonly IProductRepository _productRepository;
         private readonly ISectionRepository _sectionRepository;
 
-        public SectionController(ISectionRepository sectionRepository)
+        public ProductsController(IProductRepository productRepository, ISectionRepository sectionRepository)
         {
+            _productRepository = productRepository;
             _sectionRepository = sectionRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, string searchString)
         {
-            return View(await _sectionRepository.GetAllAsync());
-        }
-        
-        public async Task<IActionResult> Disabled()
-        {
-            return View(await _sectionRepository.GetDisabledSectionsAsync());
+            List<Product> products;
+            if (string.IsNullOrWhiteSpace(searchString))
+                products = await _productRepository.GetAllAsync();
+            else
+            {
+                products = await _productRepository.FindByNameAsync(searchString);
+                ViewBag.SearchString = searchString;
+            }
+
+            return View(products.ToPagedList(page ?? 1, 9));
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            return View(new ProductInputViewModel(await _sectionRepository.GetAllAsync()));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Section section)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                await _sectionRepository.InsertAsync(section);
+                await _productRepository.InsertAsync(product);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(section);
+            return View(new ProductInputViewModel(product, await _sectionRepository.GetAllAsync()));
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            Section section = new();
             try
             {
-                section = await _sectionRepository.FindByIdAsync(id);
+                Product product = await _productRepository.FindByIdAsync(id);
+                return View(new ProductInputViewModel(product, await _sectionRepository.GetAllAsync()));
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error.Message });
             }
-
-            return View(section);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Section section)
+        public async Task<IActionResult> Edit(Product product)
         {
             if (ModelState.IsValid)
             {
-                await _sectionRepository.UpdateAsync(section);
+                await _productRepository.UpdateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(section);
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            return View(await _sectionRepository.FindByIdAsync(id));
-        }
-
-        public async Task<IActionResult> SectionEmployees(int id, int? page)
-        {
-            List<Employee> employees = await _sectionRepository.GetSectionEmployees(id);
-
-            Section _ = await _sectionRepository.FindByIdAsync(id);
-            ViewBag.SectionName = _.Name.ToLower();
-
-            return View(await employees.ToPagedListAsync(page ?? 1, 5));
+            return View(product);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            Section section = new();
             try
             {
-                section = await _sectionRepository.FindByIdAsync(id);
+                Product product = await _productRepository.FindByIdAsync(id.Value);
+                return View(product);
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error.Message });
             }
-
-            return View(section);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Section section)
+        public async Task<IActionResult> Delete(Product product)
         {
-            await _sectionRepository.RemoveAsync(section);
+            await _productRepository.RemoveAsync(product);
             return RedirectToAction(nameof(Index));
         }
 

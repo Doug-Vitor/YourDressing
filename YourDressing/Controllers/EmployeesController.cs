@@ -10,12 +10,12 @@ using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing.Controllers
 {
-    public class EmployeeController : Controller
+    public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ISectionRepository _sectionRepository;
 
-        public EmployeeController(IEmployeeRepository employeeService, ISectionRepository sectionService)
+        public EmployeesController(IEmployeeRepository employeeService, ISectionRepository sectionService)
         {
             _employeeRepository = employeeService;
             _sectionRepository = sectionService;
@@ -24,7 +24,7 @@ namespace YourDressing.Controllers
         public async Task<IActionResult> Index(int? page, string searchString)
         {
             List<Employee> employees;
-            if (searchString is null)
+            if (string.IsNullOrWhiteSpace(searchString))
                 employees = await _employeeRepository.GetAllAsync();
             else
             {
@@ -49,7 +49,7 @@ namespace YourDressing.Controllers
 
         public async Task<IActionResult> Create()
         {
-            return View(new CreateEmployeeViewModel(await _sectionRepository.GetAllAsync()));
+            return View(new EmployeeInputViewModel(await _sectionRepository.GetAllAsync()));
         }
 
         [HttpPost]
@@ -62,7 +62,7 @@ namespace YourDressing.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(new CreateEmployeeViewModel(employee, await _sectionRepository.GetAllAsync()));
+            return View(new EmployeeInputViewModel(employee, await _sectionRepository.GetAllAsync()));
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -74,10 +74,10 @@ namespace YourDressing.Controllers
             }
             catch (ApplicationException error)
             {
-                return RedirectToAction(nameof(Error), new { message = error });
+                return RedirectToAction(nameof(Error), new { message = error.Message });
             }
 
-            return View(new CreateEmployeeViewModel(employee, await _sectionRepository.GetAllAsync()));
+            return View(new EmployeeInputViewModel(employee, await _sectionRepository.GetAllAsync()));
         }
 
         [HttpPost]
@@ -90,7 +90,7 @@ namespace YourDressing.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(new CreateEmployeeViewModel(await _sectionRepository.GetAllAsync()));
+            return View(new EmployeeInputViewModel(await _sectionRepository.GetAllAsync()));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -102,10 +102,26 @@ namespace YourDressing.Controllers
             }
             catch (ApplicationException error)
             {
-                return RedirectToAction(nameof(Error), new { message = error });
+                return RedirectToAction(nameof(Error), new { message = error.Message });
             }
 
             return View(employee);
+        }
+
+        public async Task<IActionResult> EmployeeSales(int? id, int? page)
+        {
+            try
+            {
+                Employee employee = await _employeeRepository.FindByIdAsync(id);
+                ViewBag.EmployeeName = employee.Name;
+            }
+            catch (ApplicationException error)
+            {
+                return RedirectToAction(nameof(Error), new { message = error.Message });
+            }
+
+            List<Sale> sales = await _employeeRepository.GetEmployeeSalesAsync(id.Value);
+            return View(await sales.ToPagedListAsync(page ?? 1, 10));
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -117,7 +133,7 @@ namespace YourDressing.Controllers
             }
             catch (ApplicationException error)
             {
-                return RedirectToAction(nameof(Error), new { message = error });
+                return RedirectToAction(nameof(Error), new { message = error.Message });
             }
 
             return View(employee);
@@ -125,9 +141,9 @@ namespace YourDressing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Employee employee)
         {
-            await _employeeRepository.RemoveAsync(id);
+            await _employeeRepository.RemoveAsync(employee);
             return RedirectToAction(nameof(Index));
         }
 

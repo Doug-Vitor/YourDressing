@@ -8,12 +8,12 @@ ViewBag.Subtitle2 = "Excluir funcionário: você tem certeza?";
 <h3>@ViewBag.Subtitle2</h3>
 
 <div class="container">
-    <div class="col-5" style="display:inline-block">
+    <div class="col-8" style="display:inline-block">
         <label asp-for="Name" class="form-label mt-4"></label>
         <input class="form-control" type="text" placeholder="@Model.Name" readonly="" />
 
-        <label asp-for="Birthdate" class="form-label mt-4"></label>
-        <input class="form-control" type="text" placeholder="@Model.Birthdate" readonly="" />
+        <label asp-for="Birthdate" class="col-form-label mt-4"></label>
+        <input class="form-control" type="text" placeholder="@Html.DisplayFor(model => model.Birthdate)" readonly="" />
 
         <label asp-for="Section" class="form-label mt-4"></label>
         <input class="form-control" type="text" placeholder="@Model.Section.Name"
