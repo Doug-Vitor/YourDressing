@@ -27,7 +27,6 @@
                 <td>@sale.TotalPrice.ToString("C2", CultureInfo.CurrentCulture)</td>
                 <td>@sale.Employee.GetEmployeeFirstName()</td>
                 <td>
-                    <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-action="Edit" asp-route-id="@sale.Id">Editar</a>
                     <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-action="Details" asp-route-id="@sale.Id">Detalhes</a>
                     <a class="text-dark text-decoration-underline" style="text-decoration: none" asp-action="Delete" asp-route-id="@sale.Id">Excluir</a>
                 </td>

@@ -4,21 +4,19 @@
     <thead class="table-dark text-center">
         <tr>
             <th scope="row">@Html.DisplayNameFor(model => model.First().Name)</th>
-            <th>Lucros à empresa (em R$):</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody class="text-center">
-            @foreach (Employee employee in Model)
-            {
-                <tr>
-                    <td>@employee.Name</td>
-                    <td></td>
-                    <td>
-                        <a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Detalhes</a>
-                        <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Editar</a>
-                    </td>
-                </tr>
-            }
+        @foreach (Employee employee in Model)
+        {
+            <tr>
+                <td>@employee.Name</td>
+                <td>
+                    <a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Detalhes</a>
+                    <a asp-controller="Employees" asp-action="Edit" asp-route-id="@employee.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Editar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

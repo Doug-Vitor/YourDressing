@@ -49,9 +49,28 @@ namespace YourDressing.Models
             return Name.Substring(0, Name.IndexOf(' '));
         }
 
+        public double GetEmployeeTotalProfit()
+        {
+            double totalProfit = 0;
+            foreach (Sale sale in Sales)
+            {
+                totalProfit += sale.TotalPrice;
+            }
+
+            return totalProfit;
+        }
+
         public void AddSale(Sale sale)
         {
             Sales.Add(sale);
+        }
+
+        public void AddSales(params Sale[] sales)
+        {
+            if (sales is null)
+                return;
+
+            Sales.AddRange(sales);
         }
     }
 }

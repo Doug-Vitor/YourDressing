@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,7 +51,7 @@ namespace YourDressing.Repositories
                 throw new IdNotProvidedException("ID não fornecido");
 
             Employee employee = await _context.Employees.Where(prop => prop.Id == id).Include(prop => prop.Section)
-                .FirstOrDefaultAsync();
+                .Include(prop => prop.Sales).FirstOrDefaultAsync();
             if (employee is null)
                 throw new NotFoundException("Não foi possível encontrar um funcionário correspondente ao ID fornecido.");
 
@@ -81,13 +80,22 @@ namespace YourDressing.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Employee employee)
+        public async Task RemoveAsync(int id)
         {
-            employee.Situation = EmployeeSituation.Fired;
-            employee.IsMonthEmployee = false;
-            employee.BaseSalary = 0.0;
+            Employee employee = await FindByIdAsync(id);
+            if (employee.Sales.Count == 0)
+            {
+                _context.Remove(employee);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                employee.Situation = EmployeeSituation.Fired;
+                employee.IsMonthEmployee = false;
+                employee.BaseSalary = 0.0;
 
-            await UpdateAsync(employee);
+                await UpdateAsync(employee);
+            }
         }
     }
 }

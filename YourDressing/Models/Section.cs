@@ -20,7 +20,7 @@ namespace YourDressing.Models
         [DisplayName("Situação")]
         public SectionSituation Situation { get; set; }
 
-        public virtual List<Employee> Employee { get; set; } = new();
+        public virtual List<Employee> Employees { get; set; } = new();
         public virtual List<Product> Products { get; set; } = new();
 
         public Section()
@@ -35,12 +35,39 @@ namespace YourDressing.Models
 
         public void AddEmployee(Employee employee)
         {
-            Employee.Add(employee);
+            Employees.Add(employee);
+        }
+
+        public void AddEmployees(params Employee[] employees)
+        {
+            if (employees is null)
+                return;
+
+            Employees.AddRange(employees);
         }
 
         public void AddProduct(Product product)
         {
             Products.Add(product);
+        }
+
+        public void AddProducts(params Product[] products)
+        {
+            if (products is null)
+                return;
+
+            Products.AddRange(products);
+        }
+
+        public double GetTotalProfit()
+        {
+            double totalProfit = 0;
+            foreach (Employee employeeProfit in Employees)
+            {
+                totalProfit += employeeProfit.GetEmployeeTotalProfit();
+            }
+
+            return totalProfit;
         }
     }
 }

@@ -10,7 +10,7 @@ using YourDressing.DataContext;
 namespace YourDressing.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210910222111_Initial")]
+    [Migration("20210916153923_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,7 +157,7 @@ namespace YourDressing.Migrations
             modelBuilder.Entity("YourDressing.Models.Employee", b =>
                 {
                     b.HasOne("YourDressing.Models.Section", "Section")
-                        .WithMany("Employee")
+                        .WithMany("Employees")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -216,7 +216,7 @@ namespace YourDressing.Migrations
 
             modelBuilder.Entity("YourDressing.Models.Section", b =>
                 {
-                    b.Navigation("Employee");
+                    b.Navigation("Employees");
 
                     b.Navigation("Products");
                 });

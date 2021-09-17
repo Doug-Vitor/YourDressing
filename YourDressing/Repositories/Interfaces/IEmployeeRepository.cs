@@ -14,6 +14,6 @@ namespace YourDressing.Repositories.Interfaces
         public Task<Employee> FindByIdAsync(int? id);
         public Task<List<Sale>> GetEmployeeSalesAsync(int id);
         public Task UpdateAsync(Employee employee);
-        public Task RemoveAsync(Employee employee);
+        public Task RemoveAsync(int id);
     }
 }

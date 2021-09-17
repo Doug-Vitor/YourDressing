@@ -15,21 +15,21 @@
 
         <label class="col-form-label mt-4">Produtos da venda:</label>
         <div class="container">
-            @foreach (OrderProducts product in Model.OrderProducts)
+            @foreach (OrderProducts orderProduct in Model.OrderProducts)
             {
                 <div class="col-6" style="display: inline-block">
-                    <label asp-for="@product.Product" class="col-form-label mt-4"></label>
-                    <input class="form-control" type="text" placeholder="@product.Product.Name" readonly="" />
+                    <label asp-for="@orderProduct.Product" class="col-form-label mt-4"></label>
+                    <input class="form-control" type="text" placeholder="@orderProduct.Product.Name" readonly="" />
                 </div>
 
                 <div class="col-2" style="display: inline-block">
-                    <label class="col-form-label mt-4" asp-for="@product.Quantity"></label>
-                    <input class="form-control" type="text" placeholder="@product.Quantity" readonly="" />
+                    <label class="col-form-label mt-4" asp-for="@orderProduct.Quantity"></label>
+                    <input class="form-control" type="text" placeholder="@orderProduct.Quantity" readonly="" />
                 </div>
 
                 <div class="col-2" style="display: inline-block">
                     <label class="col-form-label mt-4" asp-for="TotalPrice"></label>
-                    <input class="form-control" type="text" placeholder="@product.GetTotalPrice()" readonly="" />
+                    <input class="form-control" type="text" placeholder="@orderProduct.GetTotalPrice()" readonly="" />
                 </div>
             }
         </div>
@@ -47,9 +47,8 @@
                readonly="" style="width:500px">
 
         <div class="container" style="display:inline-block">
-            <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Cancelar</a>
+            <a class="btn btn-outline-dark" style="float:right" asp-action="Index">Voltar</a>
             <a class="btn btn-info" style="float:right" asp-controller="Employees" asp-action="Details" asp-route-id="@Model.EmployeeId">Detalhes do funcionário</a>
-            <a class="btn btn-success" style="float:right" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
         </div>
     </div>
 </div>

@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 using YourDressing.Models;
-using YourDressing.Models.ViewModels;
 using YourDressing.Repositories.Interfaces;
 
 namespace YourDressing.Controllers
@@ -130,9 +128,9 @@ namespace YourDressing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Section section)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _sectionRepository.RemoveAsync(section);
+            await _sectionRepository.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,7 +1,6 @@
-﻿<a asp-controller="Sections" asp-action="Index" class="nav-link active dropdown-toggle" data-toggle="dropdown"
-    role="button" aria-expanded="false" aria-haspopup="true">
-    Seções
-</a>
+﻿<a class="nav-link dropdown-toggle active" data-toggle="dropdown" asp-controller="Sections" asp-action="Index"
+    role="button" aria-haspopup="true" aria-expanded="false">Seções</a>
+
 <div class="dropdown-menu">
     @foreach (var item in Model)
     {
@@ -9,6 +8,7 @@
             @item.Name
         </a>
     }
+
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" asp-controller="Sections" asp-action="Index">Todas as seções</a>
 </div>

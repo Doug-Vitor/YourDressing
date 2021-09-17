@@ -65,15 +65,8 @@ namespace YourDressing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sale sale)
         {
-            foreach (OrderProducts product in sale.OrderProducts)
-            {
-                product.Product = await _productRepository.FindByIdAsync(product.ProductId);
-                product.Sale = sale;
-            }
-
             if (ModelState.IsValid)
             {
-                sale.SetTotalPrice();
                 await _saleRepository.InsertAsync(sale);
                 return RedirectToAction(nameof(Index));
             }
@@ -90,12 +83,27 @@ namespace YourDressing.Controllers
             try
             {
                 Sale sale = await _saleRepository.FindByIdAsync(id);
-                return View(sale);
+
+                SelectList selectList = new(await _productRepository.GetAllAsync(), "Id", "Name");
+                return View(new SaleInputViewModel(sale, sale.OrderProducts.Count, selectList));
             }
             catch (ApplicationException error)
             {
                 return RedirectToAction(nameof(Error), new { message = error.Message });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Sale sale)
+        {
+            if (ModelState.IsValid)
+            {
+                await _saleRepository.UpdateAsync(sale);
+                return RedirectToAction(nameof(Index));
+            }
+
+            SelectList selectList = new(await _productRepository.GetAllAsync(), "Id", "Name");
+            return View(new SaleInputViewModel(sale, sale.OrderProducts.Count, selectList));
         }
 
         public async Task<IActionResult> Details(int? id)

@@ -141,9 +141,9 @@ namespace YourDressing.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Employee employee)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _employeeRepository.RemoveAsync(employee);
+            await _employeeRepository.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

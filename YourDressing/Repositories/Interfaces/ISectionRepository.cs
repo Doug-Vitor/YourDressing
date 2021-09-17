@@ -13,6 +13,6 @@ namespace YourDressing.Repositories.Interfaces
         public Task<List<Employee>> GetSectionEmployeesAsync(int id);
         public Task<List<Sale>> GetSectionSalesAsync(int id);
         public Task UpdateAsync(Section section);
-        public Task RemoveAsync(Section section);
+        public Task RemoveAsync(int id);
     }
 }

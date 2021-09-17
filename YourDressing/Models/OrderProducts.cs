@@ -18,9 +18,10 @@ namespace YourDressing.Models
         {
         }
 
-        public OrderProducts (int productId, int quantity)
+        public OrderProducts (int productId, Product product, int quantity)
         {
             ProductId = productId;
+            Product = product;
             Quantity = quantity;
         }
 

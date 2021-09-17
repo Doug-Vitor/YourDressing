@@ -13,7 +13,7 @@
             <div class="form-group">
                 <label asp-for="Sale.Employee" class="col-form-label mt-4"></label>
                 <input type="text" class="form-control"
-                       placeholder="@Html.DisplayFor(model => model.Sale.Employee.Name)"  readonly=""/>
+                       placeholder="@Html.DisplayFor(model => model.Sale.Employee.Name)" readonly="" />
             </div>
 
             <label class="col-form-label mt-4">Produtos da venda</label>
@@ -28,20 +28,22 @@
 
                         <div class="col-4" style="display:inline-block">
                             <label class="col-form-label mt-4">Quantidade:</label>
-                            <input asp-for="Sale.OrderProducts[productsCount].Quantity" class="form-control" required=""/>
+                            <input type="number" Sale.OrderProducts[productsCount].Quantity" class="form-control" required="" />
                         </div>
                     }
                 </div>
+            </div>
+
+            <div>
+                <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
             </div>
 
             <div class="form-group">
                 <input type="hidden" asp-for="Sale.EmployeeId" />
                 <input type="submit" class="btn btn-success" style="float:right" value="Confirmar" />
             </div>
-
-            <div>
-                <a asp-action="Index" class="btn btn-outline-dark" style="float:right">Cancelar</a>
-            </div>
         </form>
+
+        <p class="text-info">Atente-se: após a criação dessa venda, não será possível editá-la. Confira as informações antes de confirmar o envio.</p>
     </div>
 </div>

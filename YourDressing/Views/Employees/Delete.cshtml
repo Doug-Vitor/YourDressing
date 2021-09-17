@@ -26,6 +26,7 @@ ViewBag.Subtitle2 = "Excluir funcionário: você tem certeza?";
         <form asp-action="Delete">
             <div class="form-group">
                 <input asp-for="Id" type="hidden" />
+                <input asp-for="Sales" type="hidden" />
                 <input type="submit" value="Confirmar" class="btn btn-danger" style="float:right" />
             </div>
         </form>

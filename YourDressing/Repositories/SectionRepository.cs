@@ -42,7 +42,8 @@ namespace YourDressing.Repositories
             if (id is null)
                 throw new IdNotProvidedException("ID não fornecido.");
 
-            Section section = await _context.Sections.FindAsync(id);
+            Section section = await _context.Sections.Include(prop => prop.Employees).ThenInclude(prop => prop.Sales)
+                .Where(prop => prop.Id == id).FirstOrDefaultAsync();
             if (section is null)
                 throw new NotFoundException("Não foi possível encontrar uma seção correspondente ao ID fornecido.");
 
@@ -65,11 +66,19 @@ namespace YourDressing.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Section section)
+        public async Task RemoveAsync(int id)
         {
-            section.Situation = SectionSituation.Disabled;
-            _context.Update(section);
-            await _context.SaveChangesAsync();
+            Section section = await FindByIdAsync(id);
+            if (section.Employees.Count == 0 && section.Products.Count == 0)
+            {
+                _context.Remove(section);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                section.Situation = SectionSituation.Disabled;
+                await UpdateAsync(section);
+            }
         }
     }
 }

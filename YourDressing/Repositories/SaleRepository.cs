@@ -21,6 +21,14 @@ namespace YourDressing.Repositories
 
         public async Task InsertAsync(Sale sale)
         {
+            foreach (OrderProducts product in sale.OrderProducts)
+            {
+                product.Product = await _context.Products.Where(prop => prop.Id == product.ProductId)
+                    .FirstOrDefaultAsync();
+                product.Sale = sale;
+            }
+
+            sale.SetTotalPrice();
             _context.Add(sale);
             await _context.SaveChangesAsync();
         }

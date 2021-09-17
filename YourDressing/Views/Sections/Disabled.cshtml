@@ -21,16 +21,16 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            @foreach(Section item in Model)
-            {
+        @foreach (Section item in Model)
+        {
+            <tr>
                 <td class="text-center">@item.Name</td>
-                <td class="text-center">@item.Description</td>
+                <td class="text-center" style="max-width:450px">@item.Description</td>
                 <td class="text-center">
                     <a asp-action="Details" asp-route-id="@item.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Detalhes</a>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="text-dark text-decoration-underline" style="text-decoration: none">Editar</a>
                 </td>
-            }
-        </tr>
+            </tr>
+        }
     </tbody>
 </table>
